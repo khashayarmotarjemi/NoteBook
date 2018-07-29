@@ -1,6 +1,7 @@
 package io.khkhm.notebook
 
 import android.app.Application
+import io.khkhm.notebook.data.Repository
 import io.khkhm.notebook.presentation.di.AppComponent
 import timber.log.Timber
 
@@ -9,6 +10,7 @@ import timber.log.Timber
  */
 class NoteBookApplication : Application() {
     lateinit var applicationComponent: AppComponent
+
 
     private fun initInjector() {
         /*applicationComponent = DaggerAppComponent.builder()
@@ -23,6 +25,7 @@ class NoteBookApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Repository.init(this)
         initInjector()
         initTimber()
     }

@@ -1,5 +1,6 @@
 package io.khkhm.notebook.domain
 
+import io.khkhm.notebook.data.BaseResponse
 import java.io.Serializable
 import java.util.*
 
@@ -8,6 +9,6 @@ import java.util.*
  */
 open class Content(open var title: String,
                    open val date: Date = Date(),
-                   open var color: Color) : Serializable {
+                   open var color: Color) : Serializable, BaseResponse() {
     val id: String = UUID.randomUUID().toString()
 }

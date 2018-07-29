@@ -32,7 +32,9 @@ app.post('/note/create/:notebook_id', function (req, res) {
 
             var note = new Note({
                 text: req.body.text,
-                title: req.body.title
+                title: req.body.title,
+                color: req.body.color,
+                date: new Date(Date.now()).toLocaleString()
             })
 
             notebook.notes.push(note)
@@ -48,6 +50,7 @@ app.post('/note/create/:notebook_id', function (req, res) {
 app.post('/notebook/create', function (req, res) {
     var notebook = new NoteBook({
         name: req.body.name,
+        date: new Date(Date.now()).toLocaleString(),
         color: req.body.color
     })
 
@@ -66,7 +69,8 @@ app.get('/notebook', function (req, res) {
     })
 })
 
-// update note text and/or title u
+// update note text and/or title and/or color
+// body: text, title, color
 app.post('/note/update/:notebook_id/:note_id', function (req, res) {
     var noteId = req.params.note_id
     var notebookId = req.params.notebook_id
@@ -87,6 +91,15 @@ app.post('/note/update/:notebook_id/:note_id', function (req, res) {
             _id: notebookId,
             'notes._id': noteId
         }, {$set: {'notes.$.title': req.body.title}}, function (err) {
+            if (err) console.log(err)
+        });
+    }
+
+    if (req.body.color) {
+        NoteBook.update({
+            _id: notebookId,
+            'notes._id': noteId
+        }, {$set: {'notes.$.color': req.body.color}}, function (err) {
             if (err) console.log(err)
         });
     }

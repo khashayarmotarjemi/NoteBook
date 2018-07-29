@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import io.khkhm.notebook.R
+import io.khkhm.notebook.data.Repository
 import io.khkhm.notebook.presentation.notebooks.NoteBooksActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -16,6 +17,15 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+
+        Repository.getAllNotebooks()
+
+
+
+
+
+
 
         login_btn.setOnClickListener {
             presenter.onLoginBtnClick(

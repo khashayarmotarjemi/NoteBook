@@ -1,5 +1,6 @@
 package io.khkhm.notebook.domain
 
+import io.khkhm.notebook.data.BaseResponse
 import java.io.Serializable
 import java.util.*
 
