@@ -40,7 +40,7 @@ app.post('/note/create/:notebook_id', function (req, res) {
             notebook.notes.push(note)
             notebook.save(function (err2, notebok) {
                 if (err2) return console.log(err2)
-                res.send("new note added")
+                res.send(note)
             })
         }
     )
@@ -104,7 +104,9 @@ app.post('/note/update/:notebook_id/:note_id', function (req, res) {
         });
     }
 
-    res.send("finished");
+    NoteBook.findOne({"_id": notebookId}, function (err, notebook) {
+        res.send(notebook.notes.id(noteId));
+    });
 });
 
 // update notebook u
@@ -143,11 +145,10 @@ app.get('/note/remove/:notebook_id/:note_id', function (req, res) {
         notebook.save(function (err) {
             if (err) console.log(err)
         })
-        res.send("deleted")
+        res.send(makeResObj("note removed"))
+
     })
 })
-
-
 
 // remove notebook d
 app.get('/notebook/remove/:notebook_id', function (req, res) {
@@ -157,10 +158,15 @@ app.get('/notebook/remove/:notebook_id', function (req, res) {
         if (err) console.log(err)
     })
 
-    res.send("notebook removed")
+    res.send(makeResObj("notebook removed"))
+
 
 })
 
+
+var makeResObj = function (res, err) {
+    return {response: res, error: err}
+}
 
 app.listen(3000)
 
