@@ -1,13 +1,20 @@
 package io.khkhm.notebook.domain
 
-import io.khkhm.notebook.data.BaseResponse
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.*
+import javax.sql.StatementEvent
 
 /**
  * Created by khashayar on 7/17/18.
  */
 open class Note(open var text: String,
-                override var title: String,
-                override val date: Date = Date(),
-                override var color: Color) : Content(title, date, color), Serializable
+                var title: String,
+                val date: Date = Date(),
+                sColor: String,
+                @SerializedName("_id") var id: String = "") : Serializable {
+    var color = Color.valueOf(sColor)
+
+    var notebookId : String = ""
+
+}

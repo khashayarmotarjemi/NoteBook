@@ -11,7 +11,11 @@ import io.khkhm.notebook.data.NoteRepository
 import io.khkhm.notebook.domain.Color
 import io.khkhm.notebook.domain.NoteBook
 import io.khkhm.notebook.presentation.notes.NotesActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_note_books.*
+import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -52,8 +56,18 @@ class NoteBooksActivity : AppCompatActivity(), NoteBooksContract.View {
 
         add_notebook_fab.setOnClickListener {
             val notebook = NoteBook("", Date(), Color.BLUE, ArrayList())
-            NoteRepository.addNoteBook(notebook)
-            openNoteBook(notebook)
+            NoteRepository.addNoteBook(notebook).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableSingleObserver<NoteBook>() {
+
+                        override fun onSuccess(notebook : NoteBook) {
+                            openNoteBook(notebook)
+                        }
+
+                        override fun onError(e: Throwable) {
+                            Timber.e(e)
+                        }
+                    })
         }
 /*
         notebooks_list_recv.addItemDecoration(dividerItemDecoration)

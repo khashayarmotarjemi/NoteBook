@@ -7,6 +7,10 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import com.google.gson.GsonBuilder
+import com.google.gson.Gson
+
+
 
 
 /**
@@ -16,19 +20,23 @@ class ApiClient {
     companion object {
         private var retrofit: Retrofit? = null
         private val REQUEST_TIMEOUT = 60
-        private val okHttpClient: OkHttpClient? = null
+        private var okHttpClient: OkHttpClient? = null
 
         fun getClient(context: Context): Retrofit {
             if (okHttpClient == null) {
                 initOkHttp(context)
             }
 
+            val gson = GsonBuilder().
+                    setLenient()
+                    .create()
+
             if (retrofit == null) {
                 retrofit = Retrofit.Builder()
                         .baseUrl(Const.BASE_URL)
                         .client(okHttpClient)
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
                         .build()
             }
             return retrofit!!
@@ -45,6 +53,7 @@ class ApiClient {
 
             httpClient.addInterceptor(interceptor)
 
+            okHttpClient = httpClient.build()
         }
 
 

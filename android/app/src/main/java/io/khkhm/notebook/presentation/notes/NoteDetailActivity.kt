@@ -9,12 +9,17 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import io.khkhm.notebook.R
+import io.khkhm.notebook.data.BaseResponse
 import io.khkhm.notebook.data.NoteRepository
 import io.khkhm.notebook.domain.Color
 import io.khkhm.notebook.domain.Note
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_note_detail.*
-import kotlinx.android.synthetic.main.activity_notes.*
+import timber.log.Timber
 
 class NoteDetailActivity : AppCompatActivity() {
 
@@ -56,27 +61,27 @@ class NoteDetailActivity : AppCompatActivity() {
                 when (i) {
                     0 -> {
                         note_detail_note_color.setCardBackgroundColor(resources.getColor(R.color.blue))
-                        NoteRepository.updateNoteColor(note, Color.BLUE)
+                        NoteRepository.updateNote(note, newColor = Color.BLUE)
                     }
 
                     1 -> {
                         note_detail_note_color.setCardBackgroundColor(resources.getColor(R.color.red))
-                        NoteRepository.updateNoteColor(note, Color.RED)
+                        NoteRepository.updateNote(note, newColor = Color.RED)
                     }
 
                     2 -> {
                         note_detail_note_color.setCardBackgroundColor(resources.getColor(R.color.green))
-                        NoteRepository.updateNoteColor(note, Color.GREEN)
+                        NoteRepository.updateNote(note, newColor = Color.GREEN)
                     }
 
                     3 -> {
                         note_detail_note_color.setCardBackgroundColor(resources.getColor(R.color.purple))
-                        NoteRepository.updateNoteColor(note, Color.PURPLE)
+                        NoteRepository.updateNote(note, newColor = Color.PURPLE)
                     }
 
                     4 -> {
                         note_detail_note_color.setCardBackgroundColor(resources.getColor(R.color.yellow))
-                        NoteRepository.updateNoteColor(note, Color.YELLOW)
+                        NoteRepository.updateNote(note, newColor = Color.YELLOW)
                     }
                 }
             })
@@ -95,13 +100,24 @@ class NoteDetailActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                NoteRepository.updateNoteTitle(note, p0.toString())
+                NoteRepository.updateNote(note, newText = p0.toString())
             }
         })
 
         note_detail_remove_note.setOnClickListener {
-            NoteRepository.removeNote(note)
-            NavUtils.navigateUpFromSameTask(this)
+            NoteRepository.removeNote(note).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableSingleObserver<BaseResponse>() {
+
+                        override fun onSuccess(baseResponse: BaseResponse) {
+                            NavUtils.navigateUpFromSameTask(this@NoteDetailActivity)
+
+                        }
+
+                        override fun onError(e: Throwable) {
+                            Timber.e(e)
+                        }
+                    })
         }
 
         note_detail_text.setText(note.text)
@@ -116,12 +132,36 @@ class NoteDetailActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                NoteRepository.updateNoteText(note, p0.toString())
+                NoteRepository.updateNote(note, newText = p0.toString())
             }
         })
 
+
+
     }
 
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    override fun onBackPressed() {
+/*
+        super.onBackPressed()
+*/
+        Timber.e("it worked")
+        NavUtils.navigateUpFromSameTask(this@NoteDetailActivity)
+
+    }
+
+
+    /**
+     * Dispatch onPause() to fragments.
+     */
+    override fun onPause() {
+        super.onPause()
+        super.onStop()
+        NoteRepository.syncNoteBooksAndRun {}
+    }
 
     companion object {
         private val EXTRA_NOTE = "extra.note.io"

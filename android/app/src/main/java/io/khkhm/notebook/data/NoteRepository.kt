@@ -3,6 +3,211 @@ package io.khkhm.notebook.data
 import io.khkhm.notebook.domain.Color
 import io.khkhm.notebook.domain.Note
 import io.khkhm.notebook.domain.NoteBook
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
+import javax.inject.Singleton
+
+
+@Singleton
+object NoteRepository {
+
+    private var noteBooks: ArrayList<NoteBook> = ArrayList()
+
+    var currentNoteBook: NoteBook? = null
+
+
+    fun updateCurrentNoteBook(newNoteBook: NoteBook) {
+        if (currentNoteBook == null) {
+            currentNoteBook = newNoteBook
+        } else {
+            syncNoteBooksAndRun { currentNoteBook = noteBooks.find { it.id == newNoteBook.id }!! }
+        }
+    }
+
+    //
+    private fun updateNoteBooks(notebooks: List<NoteBook>): List<NoteBook> {
+        noteBooks = ArrayList(notebooks)
+        return notebooks
+    }
+
+    fun syncNoteBooksAndRun(afterSync: () -> Unit) {
+
+        var oldId: String? = null
+
+        if (currentNoteBook != null) {
+            oldId = currentNoteBook!!.id
+        }
+
+        Repository.getAllNotebooks()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<List<NoteBook>>() {
+
+                    override fun onSuccess(notebooks: List<NoteBook>) {
+                        noteBooks = ArrayList(notebooks)
+                        if (oldId != null) {
+                            val requiredNotebook: NoteBook? = notebooks.find { it.id == oldId }
+                            if (requiredNotebook != null) {
+                                currentNoteBook = requiredNotebook
+                            }
+                        }
+                        afterSync()
+                    }
+
+
+                    override fun onError(e: Throwable) {
+                        Timber.e(e)
+                    }
+                })
+
+    }
+
+
+    fun getAllNoteBooks(): Single<List<NoteBook>> {
+        return Repository.getAllNotebooks().map { updateNoteBooks(it) }
+    }
+
+    fun getNoteBookById(id: String): Single<NoteBook> {
+        val notebook = noteBooks.find { it.id == id }
+
+        return if (notebook != null) {
+            Single.just(notebook)
+        } else {
+            Repository.getAllNotebooks().map { it.find { it.id == id } }
+        }
+    }
+
+
+    fun addNoteBook(noteBook: NoteBook): Single<NoteBook> {
+        /*noteBooks.add(noteBook)*/
+        return Repository.createNotebook(noteBook.name, noteBook.color)
+    }
+
+
+    fun removeNoteBook(noteBook: NoteBook): Single<BaseResponse> {
+        return Repository.removeNotebook(noteBook.id)
+    }
+
+
+    //t
+    fun removeNote(note: Note): Single<BaseResponse> {
+        return Repository.removeNote(note.notebookId, note.id)
+    }
+
+    //
+    fun addNoteToNotebook(note: Note, notebook: NoteBook): Single<Note> {
+        return Repository.createNewNote(notebook.id, note.text, note.title, note.color)
+    }
+
+    fun updateNote(note: Note, newText: String? = null, newColor: Color? = null, newTitle: String? = null) {
+        Repository.updateNote(note.notebookId, note.id, newText, newTitle, newColor)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<Note>() {
+
+                    override fun onSuccess(updatedNote: Note) {
+                        Timber.e("updated note: text : ${updatedNote.text} title : ${updatedNote.title} color : ${updatedNote.color} ")
+                    }
+
+
+                    override fun onError(e: Throwable) {
+                        Timber.e(e)
+                    }
+                })
+    }
+/*
+    //
+    fun updateNoteText(note: Note, newText: String) {
+
+
+        Timber.e(newText)
+        findNote(note)?.text = newText
+        Timber.e("founded note: " + findNote(note)?.text)
+
+    }*/
+
+/*
+
+    //
+    fun updateNoteColor(note: Note, newColor: Color) {
+        findNote(note)?.color = newColor
+    }
+
+    //
+    fun updateNoteTitle(note: Note, newTitle: String) {
+        findNote(note)?.title = newTitle
+    }
+
+*/
+
+    //t
+    fun updateNoteBook(notebook: NoteBook, newColor: Color? = null, newName: String? = null) {
+        Repository.updateNoteBook(notebook.id, newName, newColor)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<NoteBook>() {
+
+                    override fun onSuccess(updatedNotebook: NoteBook) {
+                        Timber.e("updated note: name : ${updatedNotebook.name} color : ${updatedNotebook.color}  ")
+                    }
+
+
+                    override fun onError(e: Throwable) {
+                        Timber.e(e)
+                    }
+                })
+    }
+
+
+    private fun findNote(note: Note): Note? {
+        Timber.e("called")
+        for (notebook: NoteBook in noteBooks) {
+            for (fNote: Note in notebook.notes) {
+                if (fNote.id == note.id) {
+                    Timber.e(fNote.id)
+                    return fNote
+                }
+            }
+        }
+        Timber.e("not found")
+        return null
+    }
+
+    private fun findNoteBook(notebook: NoteBook): NoteBook? {
+        for (fNotebook: NoteBook in noteBooks) {
+            if (notebook.id == fNotebook.id)
+                return fNotebook
+        }
+        return null
+    }
+
+    private fun findNoteBook(note: Note): NoteBook? {
+        for (notebook: NoteBook in noteBooks) {
+            for (fNote: Note in notebook.notes) {
+                if (fNote.id == note.id) {
+                    Timber.e(fNote.id)
+                    return notebook
+                }
+            }
+        }
+        return null
+    }
+
+
+}
+
+
+// original local codes
+
+/*
+package io.khkhm.notebook.data
+
+import io.khkhm.notebook.domain.Color
+import io.khkhm.notebook.domain.Note
+import io.khkhm.notebook.domain.NoteBook
 import io.reactivex.Observable
 import timber.log.Timber
 import java.util.*
@@ -145,4 +350,4 @@ object NoteRepository {
     }
 
 
-}
+}*/

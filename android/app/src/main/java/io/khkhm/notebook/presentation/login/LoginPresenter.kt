@@ -28,7 +28,7 @@ class LoginPresenter(val view: LoginContract.View) : LoginContract.Presenter {
                     .addInterceptor(logging)
                     .build()
 
-            val url = "http://198.143.181.203:3000/login/$username/$password"
+            val url = "http://198.143.181.203:4000/login/$username/$password"
 
             Timber.e(url)
 

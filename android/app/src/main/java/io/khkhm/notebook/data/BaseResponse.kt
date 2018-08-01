@@ -1,5 +1,6 @@
 package io.khkhm.notebook.data
 
 open class BaseResponse {
-    val error: String = ""
+    var error: String = ""
+    var response: String = ""
 }

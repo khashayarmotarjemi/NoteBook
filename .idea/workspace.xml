@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/server/app.js" line="95" />
+    <bookmark url="file://$PROJECT_DIR$/server/app.js" line="105" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72308225-c742-4eeb-80b0-5b88dc8ff774" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/ApiClient.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/ApiServices.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/BaseResponse.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/Const.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/Repository.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/NoteBookApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/NoteBookApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/ApiClient.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/ApiClient.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/ApiServices.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/ApiServices.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/BaseResponse.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/BaseResponse.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/NoteRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/NoteRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/Repository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/data/Repository.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/domain/Content.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/domain/Content.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/domain/Note.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/domain/Note.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/domain/NoteBook.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/domain/NoteBook.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/domain/ReminderNote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/domain/ReminderNote.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/presentation/login/LoginActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/presentation/login/LoginActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/presentation/login/LoginPresenter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/presentation/login/LoginPresenter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/presentation/notebooks/NoteBookPresenter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/presentation/notebooks/NoteBookPresenter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/presentation/notes/NotesActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/khkhm/notebook/presentation/notes/NotesActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -34,21 +35,22 @@
     <session id="-1358406797">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.10" value="1" />
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.10" value="3" />
+          <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="2" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="4998" />
+          <entry key="js" value="5199" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="4998" />
+          <entry key="JavaScript" value="5199" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -69,12 +71,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="52" column="52" selection-start-line="52" selection-start-column="52" selection-end-line="52" selection-end-column="52" />
-              <folding>
-                <element signature="e#715#1236#0" />
-                <element signature="e#846#1228#0" />
-              </folding>
+            <state relative-caret-position="146">
+              <caret line="149" selection-start-line="149" selection-end-line="149" />
             </state>
           </provider>
         </entry>
@@ -246,16 +244,18 @@
       <workItem from="1532689578101" duration="7484000" />
       <workItem from="1532740358186" duration="3568000" />
       <workItem from="1532781884343" duration="5025000" />
-      <workItem from="1532828846481" duration="174000" />
+      <workItem from="1532828846481" duration="1096000" />
+      <workItem from="1532862523550" duration="2784000" />
+      <workItem from="1532927141598" duration="1441000" />
+      <workItem from="1533036527833" duration="599000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25436000" />
+    <option name="totallyTimeSpent" value="31182000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="697" y="27" width="698" height="873" extended-state="4" />
-    <editor active="true" />
+    <frame x="-3" y="27" width="1401" height="876" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.50895524" />
       <window_info id="Structure" order="1" weight="0.25" />
@@ -263,7 +263,6 @@
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
       <window_info id="Capture Tool" order="5" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -274,6 +273,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -315,12 +315,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="52" column="52" selection-start-line="52" selection-start-column="52" selection-end-line="52" selection-end-column="52" />
-          <folding>
-            <element signature="e#715#1236#0" />
-            <element signature="e#846#1228#0" />
-          </folding>
+        <state relative-caret-position="146">
+          <caret line="149" selection-start-line="149" selection-end-line="149" />
         </state>
       </provider>
     </entry>

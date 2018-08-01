@@ -15,6 +15,9 @@ import io.khkhm.notebook.data.NoteRepository
 import io.khkhm.notebook.domain.Color
 import io.khkhm.notebook.domain.Note
 import io.khkhm.notebook.domain.NoteBook
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_notes.*
 import timber.log.Timber
 import java.util.*
@@ -27,17 +30,12 @@ class NotesActivity : AppCompatActivity(), NotesContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes)
 
-        var notebook: NoteBook
-
         Timber.e("oncraete")
 
-        if (intent.extras != null) {
-            notebook = intent.extras[EXTRA_NOTEBOOK] as NoteBook
-            NoteRepository.updateCurrentNoteBook(notebook)
-        } else {
-            notebook = NoteRepository.currentNoteBook
-        }
 
+    }
+
+    private fun initActivity(notebook: NoteBook) {
         Timber.e("notes: " + notebook.notes.size)
         mPresenter = NotesPresenter(this, notebook)
 
@@ -52,14 +50,24 @@ class NotesActivity : AppCompatActivity(), NotesContract.View {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                NoteRepository.updateNoteBookName(notebook, p0.toString())
+                NoteRepository.updateNoteBook(notebook, newName = p0.toString())
             }
         })
 
         note_act_add_note.setOnClickListener {
-            val note = Note("", "", Date(), Color.BLUE)
-            NoteRepository.addNoteToNotebook(note, notebook)
-            openNote(note)
+            val newNote = Note("", "", Date(), Color.BLUE.name)
+            NoteRepository.addNoteToNotebook(newNote, notebook).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableSingleObserver<Note>() {
+
+                        override fun onSuccess(note: Note) {
+                            openNote(newNote)
+                        }
+
+                        override fun onError(e: Throwable) {
+                            Timber.e(e)
+                        }
+                    })
         }
 
         when (notebook.color) {
@@ -89,34 +97,32 @@ class NotesActivity : AppCompatActivity(), NotesContract.View {
                 when (i) {
                     0 -> {
                         note_act_notebook_color.setCardBackgroundColor(resources.getColor(R.color.blue))
-                        NoteRepository.updateNoteBookColor(notebook, Color.BLUE)
+                        NoteRepository.updateNoteBook(notebook, newColor = Color.BLUE)
                     }
 
                     1 -> {
                         note_act_notebook_color.setCardBackgroundColor(resources.getColor(R.color.red))
-                        NoteRepository.updateNoteBookColor(notebook, Color.RED)
+                        NoteRepository.updateNoteBook(notebook, newColor = Color.RED)
                     }
 
                     2 -> {
                         note_act_notebook_color.setCardBackgroundColor(resources.getColor(R.color.green))
-                        NoteRepository.updateNoteBookColor(notebook, Color.GREEN)
+                        NoteRepository.updateNoteBook(notebook, newColor = Color.GREEN)
                     }
 
                     3 -> {
                         note_act_notebook_color.setCardBackgroundColor(resources.getColor(R.color.purple))
-                        NoteRepository.updateNoteBookColor(notebook, Color.PURPLE)
+                        NoteRepository.updateNoteBook(notebook, newColor = Color.PURPLE)
                     }
 
                     4 -> {
                         note_act_notebook_color.setCardBackgroundColor(resources.getColor(R.color.yellow))
-                        NoteRepository.updateNoteBookColor(notebook, Color.YELLOW)
+                        NoteRepository.updateNoteBook(notebook, newColor = Color.YELLOW)
                     }
                 }
             })
             builder.show()
         }
-
-
     }
 
     override fun setPresenter(presenter: NotesContract.Presenter) {}
@@ -140,6 +146,7 @@ class NotesActivity : AppCompatActivity(), NotesContract.View {
 
     override fun openNote(note: Note) {
         startActivity(NoteDetailActivity.newIntent(this, note))
+        //this.finish()
     }
 
     override fun showNoteDetail(note: Note) {
@@ -149,7 +156,20 @@ class NotesActivity : AppCompatActivity(), NotesContract.View {
 
     override fun onResume() {
         super.onResume()
-        mPresenter.start()
+        if (intent.extras != null) {
+            val notebook = intent.extras[EXTRA_NOTEBOOK] as NoteBook
+            NoteRepository.updateCurrentNoteBook(notebook)
+            initActivity(notebook)
+            mPresenter.start()
+
+        } else {
+            NoteRepository.syncNoteBooksAndRun {
+                val notebook = NoteRepository.currentNoteBook
+                initActivity(notebook!!)
+                mPresenter.start()
+
+            }
+        }
     }
 
     companion object {

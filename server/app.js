@@ -56,7 +56,7 @@ app.post('/notebook/create', function (req, res) {
 
     notebook.save(function (err) {
         if (err) return console.log(err)
-        res.send('notebook created')
+        res.send(notebook)
     })
 
 
@@ -146,6 +146,8 @@ app.get('/note/remove/:notebook_id/:note_id', function (req, res) {
         res.send("deleted")
     })
 })
+
+
 
 // remove notebook d
 app.get('/notebook/remove/:notebook_id', function (req, res) {
